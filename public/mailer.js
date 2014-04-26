@@ -10,8 +10,20 @@ function createHTMLMailEditor() {
 }
 
 
-var getMailCompatibleHTML = function(htmlMail, callback) {
-
+function getMailCompatibleHTML(html, successCallback, errorCallback) {
+  $.ajax({
+    type: "POST",
+    url: "/premailer/",
+    data: {
+      html: html
+    },
+    success: function(data, textStatus, jqXHR) {
+      successCallback(data);
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      errorCallback(errorThrown);
+    }
+  });
 }
 
 function validateHTMLMail() {
@@ -20,13 +32,8 @@ function validateHTMLMail() {
 
   var htmlMail = html = editor.getData();
 
-  $.ajax({
-    type: "POST",
-    url: "/premailer/",
-    data: {
-      html: htmlMail
-    },
-    success: function(data, textStatus, jqXHR) {
+  getMailCompatibleHTML(htmlMail,
+    function(data) {
       document.getElementById('htmlResult').innerHTML = data.html;
       document.getElementById('plainTextResult').innerHTML = data.plain_text;
       var warningHTML = "";
@@ -39,8 +46,8 @@ function validateHTMLMail() {
       editor.destroy();
       editor = null;
     },
-    error: function(jqXHR, textStatus, errorThrown) {
-      alert("ERROR " + textStatus);
+    function(error) {
+      alert("ERROR " + error)
     }
-  });
+  );
 }
