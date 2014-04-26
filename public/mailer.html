@@ -6,8 +6,10 @@ For licensing, see LICENSE.md or http://ckeditor.com/license
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>Ajax &mdash; CKEditor Sample</title>
+	<title>Email HTML Editor</title>
 	<script src="ckeditor/ckeditor.js"></script>
+	<script src="lib/jquery-2.1.0.min.js"></script>
+
 	<link rel="stylesheet" href="sample.css">
 	<script>
 
@@ -28,54 +30,50 @@ For licensing, see LICENSE.md or http://ckeditor.com/license
 
 			// Retrieve the editor contents. In an Ajax application, this data would be
 			// sent to the server or used in any other way.
-			document.getElementById( 'editorcontents' ).innerHTML = html = editor.getData();
-			document.getElementById( 'contents' ).style.display = '';
+			var htmlMail = html = editor.getData();
+			console.log(htmlMail);
 
-			// Destroy the editor.
-			editor.destroy();
-			editor = null;
+			$.ajax({
+				type: "POST",
+				url: "/premailer/",
+				data: {html: htmlMail},
+				success: function(data, textStatus, jqXHR){
+					document.getElementById( 'editorcontents' ).innerHTML = data;
+					document.getElementById( 'contents' ).style.display = '';
+					// Destroy the editor.
+					editor.destroy();
+					editor = null;
+				},
+				error: function (jqXHR, textStatus, errorThrown){
+					alert("ERROR " + textStatus);
+				}
+			});
 		}
 
 	</script>
 </head>
 <body>
-	<h1 class="samples">
-		<a href="index.html">CKEditor Samples</a> &raquo; Create and Destroy Editor Instances for Ajax Applications
+	<h1>
+		HTML Mail Editor: create html content compatible with email clients
 	</h1>
-	<div class="description">
-		<p>
-			This sample shows how to create and destroy CKEditor instances on the fly. After the removal of CKEditor the content created inside the editing
-			area will be displayed in a <code>&lt;div&gt;</code> element.
-		</p>
-		<p>
-			For details of how to create this setup check the source code of this sample page
-			for JavaScript code responsible for the creation and destruction of a CKEditor instance.
-		</p>
-	</div>
-	<p>Click the buttons to create and remove a CKEditor instance.</p>
+
+	<p>Click the buttons to create and save a a new email</p>
 	<p>
-		<input onclick="createEditor();" type="button" value="Create Editor">
-		<input onclick="removeEditor();" type="button" value="Remove Editor">
+		<input onclick="createEditor();" type="button" value="Create Mail">
+		<input onclick="removeEditor();" type="button" value="Validate and save Mail">
 	</p>
 	<!-- This div will hold the editor. -->
 	<div id="editor">
 	</div>
 	<div id="contents" style="display: none">
-		<p>
-			Edited Contents:
-		</p>
 		<!-- This div will be used to display the editor contents. -->
 		<div id="editorcontents">
 		</div>
 	</div>
 	<div id="footer">
 		<hr>
-		<p>
-			CKEditor - The text editor for the Internet - <a class="samples" href="http://ckeditor.com/">http://ckeditor.com</a>
-		</p>
 		<p id="copy">
-			Copyright &copy; 2003-2014, <a class="samples" href="http://cksource.com/">CKSource</a> - Frederico
-			Knabben. All rights reserved.
+			Copyright &copy; 2014, <a class="samples" href="http://twitter.com/fXzo">@fXzo</a> - Fabrice CROISEAUX.
 		</p>
 	</div>
 </body>

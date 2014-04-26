@@ -3,6 +3,7 @@ require 'rubygems' # optional for Ruby 1.9 or above.
 require 'premailer'
 require 'sinatra'
 
+
 post '/premailer/' do
   $tempFile = "input" + Time.now.strftime('%Y%m%d%H%M%S%L') + ".html"
 
@@ -25,9 +26,19 @@ post '/premailer/' do
   File.delete("public/" +$tempFile)
 
   # Output any CSS warnings
+  $warnings = ""
+
   premailer.warnings.each do |w|
-    puts "#{w[:message]} (#{w[:level]}) may not render properly in #{w[:clients]}"
+    $warnings = $warnings + "<p>#{w[:message]} (#{w[:level]}) may not render properly in #{w[:clients]}</p>"
   end
 
-  premailer.to_inline_css
+  "<h1>Reformatted HTML</h1><div style='border: solid 1px;'>" +
+  premailer.to_inline_css +
+  "</div></br>" +
+  "<h1>Plain text</h1><div style='border: solid 1px;'>" +
+  premailer.to_plain_text +
+  "</div></br>" +
+  "<div><h1>Warnings</h1>"+
+  $warnings +
+  "</div>"
 end
