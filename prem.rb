@@ -32,13 +32,13 @@ post '/premailer/' do
     $warnings = $warnings + "<p>#{w[:message]} (#{w[:level]}) may not render properly in #{w[:clients]}</p>"
   end
 
-  "<h1>Reformatted HTML</h1><div style='border: solid 1px;'>" +
+  "<h1>Reformatted HTML</h1><div id='validHtml' style='border: solid 1px;'>" +
   premailer.to_inline_css +
   "</div></br>" +
-  "<h1>Plain text</h1><div style='border: solid 1px;'>" +
+  "<h1>Plain text</h1><div id='plainText' style='border: solid 1px;'>" +
   premailer.to_plain_text +
   "</div></br>" +
-  "<div><h1>Warnings</h1>"+
+  "<h1>Warnings</h1><div id='warnings'>"+
   $warnings +
   "</div>"
 end

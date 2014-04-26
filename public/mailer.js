@@ -1,6 +1,6 @@
 var editor, html = '';
 
-function createEditor() {
+function createHTMLMailEditor() {
   if (editor)
     return;
 
@@ -9,12 +9,10 @@ function createEditor() {
   editor = CKEDITOR.appendTo('editor', config, html);
 }
 
-function removeEditor() {
+function validateHTMLMail() {
   if (!editor)
     return;
 
-  // Retrieve the editor contents. In an Ajax application, this data would be
-  // sent to the server or used in any other way.
   var htmlMail = html = editor.getData();
   console.log(htmlMail);
 
