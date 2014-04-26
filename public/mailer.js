@@ -9,12 +9,12 @@ function createHTMLMailEditor() {
   editor = CKEDITOR.appendTo('editor', config, html);
 }
 
+
 function validateHTMLMail() {
   if (!editor)
     return;
 
   var htmlMail = html = editor.getData();
-  console.log(htmlMail);
 
   $.ajax({
     type: "POST",
