@@ -2,7 +2,14 @@
 require 'rubygems' # optional for Ruby 1.9 or above.
 require 'premailer'
 require 'sinatra'
+require 'json'
 
+
+before do
+   content_type :json
+   headers 'Access-Control-Allow-Origin' => '*',
+            'Access-Control-Allow-Methods' => ['OPTIONS', 'GET', 'POST']
+end
 
 post '/premailer/' do
   $tempFile = "input" + Time.now.strftime('%Y%m%d%H%M%S%L') + ".html"
@@ -26,19 +33,18 @@ post '/premailer/' do
   File.delete("public/" +$tempFile)
 
   # Output any CSS warnings
-  $warnings = ""
+  $warnings = Array.new
 
   premailer.warnings.each do |w|
-    $warnings = $warnings + "<p>#{w[:message]} (#{w[:level]}) may not render properly in #{w[:clients]}</p>"
+    $warnings << "#{w[:message]} (#{w[:level]}) may not render properly in #{w[:clients]}"
   end
 
-  "<h1>Reformatted HTML</h1><div id='validHtml' style='border: solid 1px;'>" +
-  premailer.to_inline_css +
-  "</div></br>" +
-  "<h1>Plain text</h1><div id='plainText' style='border: solid 1px;'>" +
-  premailer.to_plain_text +
-  "</div></br>" +
-  "<h1>Warnings</h1><div id='warnings'>"+
-  $warnings +
-  "</div>"
+  $response = {
+    :html => premailer.to_inline_css,
+    :plain_text => premailer.to_plain_text,
+    :warnings => $warnings
+  }
+
+  $response.to_json
+
 end
