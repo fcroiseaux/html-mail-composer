@@ -1,8 +1,20 @@
 html-mail-composer
 ==================
 
-Simple html editor that verify the compatibility or the generated html with email clients.
+Simple html editor that verifes the compatibility of an html portion of code with email clients and returns:
 
+* a version of the html code compatible with email clients
+* a plain text version
+* the list of warnings
+
+in a json structure
+
+    {
+       "html": "the correct html version",
+       "plain_text": "the plain text version",
+       "warnings": ["first warning", "second warning"]
+    }
+    
 Use [sinatra](http://www.sinatrarb.com/) and [premailer](https://github.com/premailer/premailer/)
 ##Installation
 ###Install Sinatra
