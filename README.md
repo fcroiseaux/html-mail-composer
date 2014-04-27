@@ -5,7 +5,7 @@ Simple html editor that verifes the compatibility of an html portion of code wit
 
 * a version of the html code compatible with email clients
 * a plain text version
-* the list of warnings
+* eventually the list of warnings
 
 in a json structure
 
@@ -15,8 +15,10 @@ in a json structure
        "warnings": ["first warning", "second warning"]
     }
     
-Use [sinatra](http://www.sinatrarb.com/) and [premailer](https://github.com/premailer/premailer/)
+The server side uses [sinatra](http://www.sinatrarb.com/) and [premailer](https://github.com/premailer/premailer/)
 ##Installation
+###Install RDOC
+    gem install rdoc
 ###Install Sinatra
     gem install sinatra
 ###Install premailer

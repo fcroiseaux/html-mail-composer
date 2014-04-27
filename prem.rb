@@ -18,7 +18,7 @@ post '/premailer/' do
     f.puts request.POST["html"]
   end
 
-  premailer = Premailer.new("http://localhost:4567/" + $tempFile, :warn_level => Premailer::Warnings::SAFE)
+  premailer = Premailer.new("http://localhost:#{request.port}/" + $tempFile, :warn_level => Premailer::Warnings::SAFE)
 
   # Write the HTML output
   File.open("public/output.html", "w") do |fout|
