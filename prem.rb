@@ -21,14 +21,14 @@ post '/premailer/' do
   premailer = Premailer.new("http://localhost:#{request.port}/" + $tempFile, :warn_level => Premailer::Warnings::SAFE)
 
   # Write the HTML output
-  File.open("public/output.html", "w") do |fout|
-    fout.puts premailer.to_inline_css
-  end
+  #File.open("public/output.html", "w") do |fout|
+  #  fout.puts premailer.to_inline_css
+  #end
 
   # Write the plain-text output
-  File.open("public/output.txt", "w") do |fout|
-    fout.puts premailer.to_plain_text
-  end
+  #File.open("public/output.txt", "w") do |fout|
+  #  fout.puts premailer.to_plain_text
+  #end
 
   File.delete("public/" +$tempFile)
 
