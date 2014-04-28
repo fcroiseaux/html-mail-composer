@@ -12,13 +12,13 @@ before do
 end
 
 post '/premailer/' do
-  $tempFile = "input" + Time.now.strftime('%Y%m%d%H%M%S%L') + ".html"
+  tempFile = "input" + Time.now.strftime('%Y%m%d%H%M%S%L') + ".html"
 
-  File.open("public/" +$tempFile, "w") do |f|
+  File.open("public/" + tempFile, "w") do |f|
     f.puts request.POST["html"]
   end
 
-  premailer = Premailer.new("http://localhost:#{request.port}/" + $tempFile, :warn_level => Premailer::Warnings::SAFE)
+  premailer = Premailer.new("http://localhost:#{request.port}/#{tempFile}", :warn_level => Premailer::Warnings::SAFE)
 
   # Write the HTML output
   #File.open("public/output.html", "w") do |fout|
@@ -30,21 +30,21 @@ post '/premailer/' do
   #  fout.puts premailer.to_plain_text
   #end
 
-  File.delete("public/" +$tempFile)
+  File.delete("public/" + tempFile)
 
   # Output any CSS warnings
-  $warnings = Array.new
+  warnings = Array.new
 
   premailer.warnings.each do |w|
-    $warnings << "#{w[:message]} (#{w[:level]}) may not render properly in #{w[:clients]}"
+    warnings << "#{w[:message]} (#{w[:level]}) may not render properly in #{w[:clients]}"
   end
 
-  $response = {
+  response = {
     :html => premailer.to_inline_css,
     :plain_text => premailer.to_plain_text,
-    :warnings => $warnings
+    :warnings => warnings
   }
 
-  $response.to_json
+  response.to_json
 
 end
